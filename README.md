@@ -1,3 +1,3 @@
 # GoDownloadPackages
-Download packages for Ubuntu, include all packages dependens (also take dependens for dependens pack etc). Full deb files to install all what you want.
+Download packages for Ubuntu, include all packages dependens (also take dependens for dependens pack etc). And you get all the packages you need to install.
 No "sudo" required.
