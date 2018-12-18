@@ -17,32 +17,36 @@ type MainMap struct {
 
 func main() {
 	var i uint
-	pack := "docker.io" //From console key
+	args := os.Args[:]
+	if len(args) > 2 {
+		log.Fatal("You must write package name, not just run programm!")
+	}
+	pack := args[1]
 	packagesMap := &MainMap{M: make(map[string]uint)}
 
 	Put(pack, i, packagesMap) // put "main" package
 	i++
-	//
+
 	RecurseDependens(packagesMap, i) // Get dependens for all packages (exclude some os pack)
-	//
+
 	folderName := "packages_for_" + pack //make new folder end move to it
 	os.Mkdir(folderName, 0700)
 	ex, _ := os.Executable()
 	exPath := filepath.Dir(ex)
 	packagesFullPath := exPath + "/" + folderName
 	err := os.Chdir(packagesFullPath)
-	//
+
 	if err != nil {
 		log.Fatal("Cant enter directory: ", packagesFullPath)
 	}
-	///
-	for keyPack := range packagesMap.M { // download all packeges
+
+	for keyPack := range packagesMap.M { // download all packages
 		andso, _ := exec.Command("apt", "download", keyPack).Output()
 		fmt.Println(string(andso))
 	}
 }
 
-func RecurseDependens(ma *MainMap, i uint) { //pepreopredeleniya peremennih
+func RecurseDependens(ma *MainMap, i uint) {
 	for key := range ma.M {
 		depends, err := ListPackageDepends(key)
 		if err != nil {
@@ -59,15 +63,12 @@ func RecurseDependens(ma *MainMap, i uint) { //pepreopredeleniya peremennih
 				ma.Unlock()
 			}
 		}
-		// fmt.Println("for pack: ", key, " have depends: ", depends)
 	}
-	fmt.Println("Itog:", ma, ". Total packeges: ", i)
+	fmt.Println("What we got:", ma, ". Total packeges: ", i)
 }
 
 func Put(key string, val uint, ma *MainMap) {
-	if !(strings.Contains(key, "lib")) && !(strings.Contains(key, "iptables")) && !(strings.Contains(key, "passwd")) && !(strings.Contains(key, "adduser")) { //avoid standart libs
-		ma.M[key] = val
-	}
+	ma.M[key] = val
 }
 
 func IsKeyExist(key string, ma *MainMap) bool { //Check key exist
