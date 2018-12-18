@@ -1,3 +1,9 @@
 # GoDownloadPackages
-Download packages for Ubuntu, include all packages dependens (also take dependens for dependens pack etc). And you get all the packages you need to install.
+Download packages for Ubuntu, include all packages dependents (also take dependents for dependents pack etc). And you get all the packages you need to install.
 No "sudo" required.
+
+Example: 
+
+./dlder htop
+
+It will be create folder "packages_for_htop" near running progamm and download all .deb packages there.
